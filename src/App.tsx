@@ -3,6 +3,7 @@ import { useItemTimer } from "./hooks/useItemTimer";
 import { useItemManagement } from "./hooks/useItemManagement";
 import { CategorySection } from "./components/CategorySection";
 import { foodItems } from "./data/mocks/foodItems";
+import { useEffect } from "react";
 
 function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -24,6 +25,15 @@ function App() {
     clearTimer(item);
     returnItem(item, category);
   };
+
+  useEffect(() => {
+    Object.entries(timers).forEach(([item, time]) => {
+      if (time === 0 && (vegetables.includes(item) || fruits.includes(item))) {
+        const category = vegetables.includes(item) ? "vegetable" : "fruit";
+        handleMoveBack(item, category);
+      }
+    });
+  }, [timers, vegetables, fruits, handleMoveBack]);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
